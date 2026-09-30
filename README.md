@@ -1,16 +1,20 @@
-# Cafe Cinema Website
+# Cafe Cinema Web App
 
-Mobile-first Persian/English Cafe Cinema website built from the supplied specifications and supplied image assets.
+A responsive Persian/English static website built from the supplied original and neon SVG artwork.
 
-## Included
-- Home / Menu / Instagram / About us pages with fixed bottom navigation.
-- Original supplied logo and food images are used without AI regeneration.
-- About page uses the real van photo with its original aspect ratio (no stretching).
-- Home page uses the supplied cartoon van image in the former menu-image area.
-- Menu category strip is removed.
-- Shared photos are used for paired menu items as requested.
-- About cards use outline info/location/clock icons consistent with the bottom-navigation icon style.
-- Small Persian/English copy is increased for readability.
+## Pages and behavior
 
-## Font note
-The archive contained `Nazanin Bold.TTF` and `MontGilnozaRegular.ttf`; it did not contain a file named `Intro Regular`. The site therefore loads the supplied MontGilnozaRegular file for English text as the available supplied English font. If the actual Intro Regular TTF is supplied later, replace `assets/english.ttf` with that file (or update the @font-face source in `style.css`).
+- Home, Menu, Food, Drinks, Instagram, and About Us screens.
+- Original SVGs provide each screen's content; neon SVGs are used only to create the glow layer.
+- Food and drinks screens keep the Menu tab active.
+- The Instagram call-to-action links to `https://www.instagram.com/Cinema.cafee_/`.
+- The Instagram logo uses a 2.7-second lamp-flicker animation.
+- The bottom navigation is responsive and highlights only the current section.
+
+## GitHub Pages
+
+The live site is published from the `main` branch and repository root. Keep `index.html`, `app.js`, `styles.css`, and the `assets/` folder together at the root. Committing updates to `main` triggers the Pages deployment.
+
+Live site: <https://cafecinema3.github.io/Cafe-cinema/>
+
+For local testing, serve this folder with a static web server. Direct `file://` access may prevent the browser from fetching SVG assets.
