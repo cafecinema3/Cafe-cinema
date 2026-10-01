@@ -83,6 +83,93 @@
     return documentNode.documentElement;
   }
 
+  async function removeFlatPaperLayers(svg) {
+    const sample = document.createElement("canvas");
+    sample.width = 8;
+    sample.height = 8;
+    const context = sample.getContext("2d", { willReadFrequently: true });
+    if (!context) return;
+    const paperSizes = new Set(["941x1672", "675x1200"]);
+    const flatSources = new Set();
+
+    for (const layer of svg.querySelectorAll("image")) {
+      const source = layer.getAttribute("href")
+        || layer.getAttributeNS("http://www.w3.org/1999/xlink", "href");
+      if (!source?.startsWith("data:image/png;base64,")) continue;
+
+      if (flatSources.has(source)) {
+        layer.remove();
+        continue;
+      }
+
+      try {
+        const header = Uint8Array.from(atob(source.slice(22, 54)), char => char.charCodeAt(0));
+        const dimensions = new DataView(header.buffer);
+        const width = dimensions.getUint32(16);
+        const height = dimensions.getUint32(20);
+        if (!paperSizes.has(`${width}x${height}`)) continue;
+      } catch {
+        continue;
+      }
+
+      const image = new Image();
+      image.src = source;
+      try {
+        await image.decode();
+        context.clearRect(0, 0, sample.width, sample.height);
+        context.drawImage(image, 0, 0, sample.width, sample.height);
+        const pixels = context.getImageData(0, 0, sample.width, sample.height).data;
+        let isFlatPaper = true;
+        for (let i = 0; i < pixels.length; i += 4) {
+          const difference = Math.max(
+            Math.abs(pixels[i] - 40),
+            Math.abs(pixels[i + 1] - 40),
+            Math.abs(pixels[i + 2] - 41)
+          );
+          if (difference > 1 || pixels[i + 3] < 250) {
+            isFlatPaper = false;
+            break;
+          }
+        }
+        if (isFlatPaper) {
+          flatSources.add(source);
+          layer.remove();
+        }
+      } catch {
+        // Keep any artwork layer that cannot be safely inspected.
+      }
+    }
+
+    const logo = svg.querySelector('[id="لوگوی_x0020_اصلی_x0020_1.png"]');
+    const logoSource = logo?.getAttribute("href")
+      || logo?.getAttributeNS("http://www.w3.org/1999/xlink", "href");
+    if (logo && logoSource?.startsWith("data:image/png;base64,")) {
+      try {
+        const image = new Image();
+        image.src = logoSource;
+        await image.decode();
+        const canvas = document.createElement("canvas");
+        canvas.width = image.naturalWidth;
+        canvas.height = image.naturalHeight;
+        const context = canvas.getContext("2d", { willReadFrequently: true });
+        if (!context) return;
+        context.drawImage(image, 0, 0);
+        const pixels = context.getImageData(0, 0, canvas.width, canvas.height);
+        for (let i = 0; i < pixels.data.length; i += 4) {
+          if (Math.max(
+            Math.abs(pixels.data[i] - 40),
+            Math.abs(pixels.data[i + 1] - 40),
+            Math.abs(pixels.data[i + 2] - 41)
+          ) <= 1) pixels.data[i + 3] = 0;
+        }
+        context.putImageData(pixels, 0, 0);
+        logo.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", canvas.toDataURL("image/png"));
+      } catch {
+        // Leave the original logo untouched if its matte cannot be removed safely.
+      }
+    }
+  }
+
   function setActiveNavigation(pageKey) {
     const section = pageKey === "food" || pageKey === "drinks" ? "menu" : pageKey;
     document.querySelectorAll(".nav-button").forEach(button => {
@@ -189,13 +276,13 @@
       const height = canvas.height;
 
       for (let y = 0; y < height; y++) {
-        const insideInstagramLogo = page.title === "اینستاگرام" && y / height > .15 && y / height < .46;
+        const insideInstagramLogo = page.title === "اینستاگرام" && y / height > .16 && y / height < .54;
         for (let x = 0; x < width; x++) {
           const i = (y * width + x) * 4;
           const red = data[i] > 72 && data[i] > data[i + 1] * 1.45 && data[i] > data[i + 2] * 1.45;
           const yellow = data[i] > 130 && data[i + 1] > 100 && data[i + 2] < 105
             && data[i] > data[i + 2] * 1.45 && data[i + 1] > data[i + 2] * 1.2;
-          const inLogoArea = insideInstagramLogo && x / width > .19 && x / width < .81;
+          const inLogoArea = insideInstagramLogo && x / width > .20 && x / width < .80;
 
           if (inLogoArea || (!red && !yellow)) {
             data[i + 3] = 0;
@@ -232,6 +319,8 @@
 
     try {
       const originalSvg = parseSvg(await readSvg(page.file));
+      if (token !== revision) return;
+      await removeFlatPaperLayers(originalSvg);
       if (token !== revision) return;
 
       originalSvg.classList.add("screen-svg");

@@ -1,9 +1,9 @@
 :root {
   color-scheme: dark;
   --stage: #111112;
-  --paper: #282829;
+  --paper: #0a0a0b;
   --red: #c60101;
-  --yellow: #fff212;
+  --yellow: #e5d714;
   --ink: #fffaf5;
   --quiet: #858589;
   --toolbar-height: calc(84px + env(safe-area-inset-bottom, 0px));
@@ -34,9 +34,10 @@ button, a { font: inherit; }
   isolation: isolate;
   width: min(100vw, 520px);
   height: 100dvh;
+  min-height: 100dvh;
   margin-inline: auto;
   overflow: hidden;
-  background: var(--paper);
+  background: var(--paper) url("assets/paper-texture.jpg") center / 100% 100% no-repeat;
   box-shadow: 0 0 42px #0009;
 }
 
@@ -47,7 +48,7 @@ button, a { font: inherit; }
   overflow-y: auto;
   overscroll-behavior: contain;
   scrollbar-width: none;
-  background: var(--paper);
+  background: transparent;
   -webkit-overflow-scrolling: touch;
 }
 
@@ -57,7 +58,7 @@ button, a { font: inherit; }
   position: relative;
   width: 100%;
   overflow: hidden;
-  background: var(--paper);
+  background: transparent;
 }
 
 .art-full {
@@ -84,11 +85,9 @@ button, a { font: inherit; }
   width: 100%;
   height: 100%;
   pointer-events: none;
+  opacity: .12;
   mix-blend-mode: screen;
-  filter:
-    drop-shadow(0 0 2px #fff8)
-    drop-shadow(0 0 5px #ff1717c9)
-    drop-shadow(0 0 11px #ff111177);
+  filter: drop-shadow(0 0 2px #ff17172e);
 }
 
 .hotspot-layer {
@@ -133,22 +132,36 @@ button, a { font: inherit; }
   gap: 5px;
   height: var(--toolbar-height);
   padding: 7px 10px max(6px, env(safe-area-inset-bottom, 0px));
-  background: linear-gradient(180deg, #282829f7, #1d1c1dfc);
-  box-shadow: 0 -8px 28px #0007;
+  background: transparent;
+}
+
+.toolbar::before {
+  position: absolute;
+  top: 0;
+  right: 8%;
+  left: 8%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #85858955 12%, #a3a3a766 50%, #85858955 88%, transparent);
+  box-shadow: 0 0 6px #a3a3a733;
+  content: "";
+  pointer-events: none;
 }
 
 .nav-button {
   display: grid;
+  width: min(72px, 100%);
   min-width: 0;
-  min-height: 62px;
+  height: 64px;
+  min-height: 64px;
+  justify-self: center;
   align-content: center;
   justify-items: center;
   gap: 3px;
-  border: 1px solid transparent;
-  border-radius: 15px;
-  background: transparent;
+  border: 1px solid #727376;
+  border-radius: 17px;
+  background: #08080924;
   color: var(--quiet);
-  opacity: .78;
+  opacity: .86;
   cursor: pointer;
   transition: color 180ms ease, opacity 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
   -webkit-tap-highlight-color: transparent;
@@ -178,15 +191,15 @@ button, a { font: inherit; }
 .nav-button:hover { color: #ddd5d1; opacity: 1; }
 
 .nav-button[aria-current="page"] {
-  border-color: #c60101b8;
-  background: radial-gradient(ellipse at 50% 55%, #c6010129, transparent 72%);
+  border-color: #9d646244;
+  background: radial-gradient(ellipse at 50% 55%, #c601010d, transparent 72%);
   color: var(--yellow);
   opacity: 1;
-  box-shadow: 0 0 11px #c6010152, inset 0 0 9px #c6010128;
+  box-shadow: 0 0 4px #c6010122, inset 0 0 3px #c6010110;
 }
 
 .nav-button[aria-current="page"] svg {
-  filter: drop-shadow(0 0 4px #fff212bb) drop-shadow(0 0 9px #ff1717c9);
+  filter: drop-shadow(0 0 1px #e5d71455);
 }
 
 .nav-button:focus-visible {
@@ -209,17 +222,17 @@ button, a { font: inherit; }
   }
   3%, 11%, 18%, 26%, 33%, 41%, 49%, 58%, 68% {
     opacity: 1;
-    filter: brightness(1.12) drop-shadow(0 0 5px #ff1717c9);
+    filter: brightness(1.06) saturate(1.08);
   }
   75%, 100% {
     opacity: 1;
-    filter: brightness(1.08) drop-shadow(0 0 7px #ff1717d9) drop-shadow(0 0 16px #ff171788);
+    filter: brightness(1.04) saturate(1.04);
   }
 }
 
 @keyframes lamp-reduced {
   from { opacity: .12; filter: brightness(.06) saturate(.35); }
-  to { opacity: 1; filter: brightness(1.08) drop-shadow(0 0 10px #ff1717bb); }
+  to { opacity: 1; filter: brightness(1.04) saturate(1.04); }
 }
 
 @keyframes page-enter {
@@ -253,7 +266,7 @@ button, a { font: inherit; }
 
 @media (max-height: 600px) {
   :root { --toolbar-height: calc(72px + env(safe-area-inset-bottom, 0px)); }
-  .nav-button { min-height: 54px; }
+  .nav-button { width: min(58px, 100%); height: 54px; min-height: 54px; }
   .nav-button svg { width: 22px; height: 22px; }
 }
 
