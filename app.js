@@ -20,8 +20,8 @@
     food: {
       title: "منوی غذا",
       alt: "منوی غذاهای کافه سینما",
-      file: "assets/original/menu_original_food_menu.svg",
-      neon: "assets/neon/menu_food_menu_neon.svg",
+      file: "assets/original/menu_original_food_menu.svg?v=food-cdr-20261001",
+      neon: "assets/neon/menu_food_menu_neon.svg?v=food-cdr-20261001",
       height: 168995,
       contentHeight: 160950
     },
