@@ -5,7 +5,9 @@ A responsive Persian/English static website built from the supplied original and
 ## Pages and behavior
 
 - Home, Menu, Food, Drinks, Instagram, and About Us screens.
-- Original SVGs provide each screen's content; neon SVGs are used only to create the glow layer.
+- Original SVGs provide each screen's content; neon glows stay off raster image areas (except on About Us).
+- One red separator is shared above the bottom navigation, and all four navigation borders have a subtle glow.
+- The supplied crumpled-paper texture is the shell background; flat `#282829` backing pixels are made transparent at render time, including behind the Instagram logo.
 - Food and drinks screens keep the Menu tab active.
 - The Instagram call-to-action links to `https://www.instagram.com/Cinema.cafee_/`.
 - The Instagram logo uses a 2.7-second lamp-flicker animation.
