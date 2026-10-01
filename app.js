@@ -4,51 +4,51 @@
     home: {
       title: "خانه",
       alt: "صفحهٔ خانهٔ کافه سینما",
-      file: "assets/original/home_original_screen.svg",
-      neon: "assets/neon/home_screen_neon.svg",
+      file: "assets/original/home_original_screen.svg?v=site-artwork-cdr-20261001",
+      neon: "assets/neon/home_screen_neon.svg?v=site-artwork-cdr-20261001",
       height: 67600,
       contentHeight: 59600
     },
     menu: {
       title: "منو",
       alt: "منوی اصلی کافه سینما",
-      file: "assets/original/menu_original_screen_main_menu.svg",
-      neon: "assets/neon/menu_screen_main_menu_neon.svg",
+      file: "assets/original/menu_original_screen_main_menu.svg?v=site-artwork-cdr-20261001",
+      neon: "assets/neon/menu_screen_main_menu_neon.svg?v=site-artwork-cdr-20261001",
       height: 67600,
       contentHeight: 59600
     },
     food: {
       title: "منوی غذا",
       alt: "منوی غذاهای کافه سینما",
-      file: "assets/original/menu_original_food_menu.svg?v=food-menu-cdr-20261001",
-      neon: "assets/neon/menu_food_menu_neon.svg?v=food-menu-cdr-20261001",
+      file: "assets/original/menu_original_food_menu.svg?v=site-artwork-cdr-20261001",
+      neon: "assets/neon/menu_food_menu_neon.svg?v=site-artwork-cdr-20261001",
       height: 168995,
       contentHeight: 160950
     },
     drinks: {
       title: "منوی نوشیدنی‌ها",
       alt: "منوی نوشیدنی‌های کافه سینما",
-      file: "assets/original/menu_drink_menu.svg",
-      neon: "assets/neon/menu_drink_menu_neon.svg",
+      file: "assets/original/menu_drink_menu.svg?v=site-artwork-cdr-20261001",
+      neon: "assets/neon/menu_drink_menu_neon.svg?v=site-artwork-cdr-20261001",
       height: 188756,
       contentHeight: 180711
     },
     instagram: {
       title: "اینستاگرام",
       alt: "صفحهٔ اینستاگرام کافه سینما",
-      file: "assets/original/instagram_original_screen.svg",
-      neon: "assets/neon/instagram_screen_neon.svg",
+      file: "assets/original/instagram_original_screen.svg?v=site-artwork-cdr-20261001",
+      neon: "assets/neon/instagram_screen_neon.svg?v=site-artwork-cdr-20261001",
       height: 67600,
       contentHeight: 59600
     },
     about: {
-      title: "دربارهٔ ما",
-      alt: "دربارهٔ کافه سینما، آدرس و ساعت کاری",
-      file: "assets/original/about_us_original_screen.svg",
-      neon: "assets/neon/about_us_screen_neon.svg",
-      height: 98800,
-      contentHeight: 90750
-    }
+    title: "دربارهٔ ما",
+    alt: "دربارهٔ کافه سینما، آدرس و ساعت کاری",
+    file: "assets/original/about_us_original_screen.svg?v=site-artwork-cdr-20261001",
+    neon: "assets/neon/about_us_screen_neon.svg?v=site-artwork-cdr-20261001",
+    height: 98758,
+    contentHeight: 90660
+  }
   };
 
   const artWindow = document.querySelector("#artWindow");
@@ -381,7 +381,7 @@
       originalSvg.setAttribute("aria-label", page.alt);
 
       if (key === "instagram") {
-        const logo = originalSvg.querySelector('[id="لوگوی_x0020_اصلی_x0020_1.png"]');
+        const logo = originalSvg.querySelector('[id="instagram-logo-image"]');
         if (logo) logo.classList.add("instagram-lamp");
       }
 
