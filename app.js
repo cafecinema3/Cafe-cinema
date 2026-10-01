@@ -317,6 +317,19 @@
         }
       }
 
+      for (let y = Math.floor(height * .985); y < height; y++) {
+        let redCount = 0;
+        for (let x = 0; x < width; x++) {
+          const i = (y * width + x) * 4;
+          if (data[i + 3] && data[i] > data[i + 1] * 1.45 && data[i] > data[i + 2] * 1.45) redCount++;
+        }
+        if (redCount < width * .75) continue;
+        for (let x = 0; x < width; x++) {
+          const i = (y * width + x) * 4;
+          if (data[i] > data[i + 1] * 1.45 && data[i] > data[i + 2] * 1.45) data[i + 3] = 0;
+        }
+      }
+
       context.putImageData(pixels, 0, 0);
 
       if (svg && page.file !== pages.about.file) {
