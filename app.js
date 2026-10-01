@@ -28,7 +28,7 @@
     drinks: {
       title: "منوی نوشیدنی‌ها",
       alt: "منوی نوشیدنی‌های کافه سینما",
-      file: "assets/original/menu_original_drink_menu.svg",
+      file: "assets/original/menu_drink_menu.svg",
       neon: "assets/neon/menu_drink_menu_neon.svg",
       height: 188756,
       contentHeight: 180711
@@ -60,6 +60,7 @@
   let currentPage = null;
   let currentLayer = null;
   let currentCanvas = null;
+  let currentSvg = null;
   let revision = 0;
   let resizeTimer;
 
@@ -252,7 +253,25 @@
     canvas.height = Math.round(pixelWidth * page.contentHeight / viewBoxWidth);
   }
 
-  async function paintNeon(page, canvas, token) {
+  function removeBottomSeparator(svg) {
+    const artBounds = artWindow.getBoundingClientRect();
+    const red = "rgb(198, 1, 1)";
+
+    for (const shape of svg.querySelectorAll("path, line, rect, polyline")) {
+      const style = getComputedStyle(shape);
+      if (style.fill !== red && style.stroke !== red) continue;
+
+      const bounds = shape.getBoundingClientRect();
+      if (bounds.width < artBounds.width * .8
+        || bounds.height > Math.max(4, artBounds.height * .01)
+        || bounds.top < artBounds.bottom - artBounds.height * .05
+        || bounds.bottom > artBounds.bottom + 1) continue;
+
+      shape.remove();
+    }
+  }
+
+  async function paintNeon(page, canvas, token, svg) {
     let objectUrl;
     try {
       const neonSvg = parseSvg(await readSvg(page.neon));
@@ -299,6 +318,24 @@
       }
 
       context.putImageData(pixels, 0, 0);
+
+      if (svg && page.file !== pages.about.file) {
+        const artBounds = artWindow.getBoundingClientRect();
+        const scaleX = canvas.width / artBounds.width;
+        const scaleY = canvas.height / artBounds.height;
+        const padding = Math.ceil(Math.max(scaleX, scaleY));
+
+        for (const image of svg.querySelectorAll("image")) {
+          const bounds = image.getBoundingClientRect();
+          if (!bounds.width || !bounds.height) continue;
+
+          const left = Math.max(0, Math.floor((bounds.left - artBounds.left) * scaleX) - padding);
+          const top = Math.max(0, Math.floor((bounds.top - artBounds.top) * scaleY) - padding);
+          const right = Math.min(canvas.width, Math.ceil((bounds.right - artBounds.left) * scaleX) + padding);
+          const bottom = Math.min(canvas.height, Math.ceil((bounds.bottom - artBounds.top) * scaleY) + padding);
+          if (right > left && bottom > top) context.clearRect(left, top, right - left, bottom - top);
+        }
+      }
     } catch {
       if (token === revision) canvas.hidden = true;
     } finally {
@@ -337,18 +374,21 @@
 
       const layer = document.createElement("div");
       layer.className = "art-full";
-      layer.append(document.importNode(originalSvg, true));
+      const screenSvg = document.importNode(originalSvg, true);
+      layer.append(screenSvg);
       addPageControls(layer, key);
 
       const canvas = document.createElement("canvas");
-      canvas.className = "neon-mask";
+      canvas.className = key === "about" ? "neon-mask" : "neon-mask crisp-images";
       canvas.setAttribute("aria-hidden", "true");
       artWindow.replaceChildren(layer, canvas);
       currentLayer = layer;
       currentCanvas = canvas;
       fitArtwork(page, layer, canvas);
+      removeBottomSeparator(screenSvg);
+      currentSvg = screenSvg;
       artWindow.setAttribute("aria-busy", "false");
-      void paintNeon(page, canvas, token);
+      void paintNeon(page, canvas, token, screenSvg);
     } catch {
       if (token !== revision) return;
       artWindow.style.height = "auto";
@@ -383,7 +423,7 @@
     resizeTimer = setTimeout(() => {
       if (!currentPage || !currentLayer || !currentCanvas) return;
       fitArtwork(currentPage, currentLayer, currentCanvas);
-      void paintNeon(currentPage, currentCanvas, revision);
+      void paintNeon(currentPage, currentCanvas, revision, currentSvg);
     }, 120);
   });
 
