@@ -10,7 +10,7 @@ A responsive Persian/English static website built from the supplied original and
 - The supplied crumpled-paper texture is the shell background; flat `#282829` backing pixels are made transparent at render time, including behind the Instagram logo.
 - Food and drinks screens keep the Menu tab active.
 - The Instagram call-to-action links to `https://www.instagram.com/Cinema.cafee_/`.
-- The Instagram logo uses a 2.7-second lamp-flicker animation.
+- The Instagram logo uses a 2.2-second lamp-flicker animation.
 - The bottom navigation is responsive and highlights only the current section.
 
 ## GitHub Pages
