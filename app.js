@@ -323,7 +323,7 @@
           const i = (y * width + x) * 4;
           if (data[i + 3] && data[i] > data[i + 1] * 1.45 && data[i] > data[i + 2] * 1.45) redCount++;
         }
-        if (redCount < width * .75) continue;
+        if (redCount < width * .65) continue;
         for (let x = 0; x < width; x++) {
           const i = (y * width + x) * 4;
           if (data[i] > data[i + 1] * 1.45 && data[i] > data[i + 2] * 1.45) data[i + 3] = 0;
